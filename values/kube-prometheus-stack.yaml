@@ -1,0 +1,21 @@
+kube-state-metrics:
+  metricLabelsAllowlist:
+    - pods=[*]
+    - deployments=[app.kubernetes.io/name,app.kubernetes.io/component,app.kubernetes.io/instance]
+    - services=[*]
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+grafana:
+  grafana.ini:
+    plugins:
+      allow_loading_unsigned_plugins: lyz-knative-datasource
+  extraVolumeMounts:
+    - name: plugins
+      mountPath: /var/lib/grafana/plugins
+      readOnly: false
+  extraVolumes:
+    - name: plugins
+      hostPath:
+        path: /data/plugins
