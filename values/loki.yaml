@@ -22,3 +22,6 @@ backend:
   replicas: 0
 singleBinary:
   replicas: 1
+  persistence:
+    enabled: true
+    storageClass: nfs-csi
