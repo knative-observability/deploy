@@ -107,7 +107,7 @@ spec:
             - containerPort: 27017
           volumeMounts:
             - name: mongodb-data
-              mountPath: /data/db
+              mountPath: /data
           resources:
             limits:
               cpu: "0.5"
@@ -117,28 +117,7 @@ spec:
         name: mongodb-data
       spec:
         accessModes: [ "ReadWriteOnce" ]
-        storageClassName: mongodb-knative-agent
+        storageClassName: nfs-csi
         resources:
           requests:
-            storage: 1Gi
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: mongodb-pv
-spec:
-  capacity:
-    storage: 32Gi
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Delete
-  storageClassName: mongodb-knative-agent
-  hostPath:
-    path: /data/mongodb
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: mongodb-knative-agent
-provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: WaitForFirstConsumer
+            storage: 10Gi

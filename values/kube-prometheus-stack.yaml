@@ -11,11 +11,8 @@ grafana:
   grafana.ini:
     plugins:
       allow_loading_unsigned_plugins: lyz-knative-datasource
-  extraVolumeMounts:
-    - name: plugins
-      mountPath: /var/lib/grafana/plugins
-      readOnly: false
-  extraVolumes:
-    - name: plugins
-      hostPath:
-        path: /data/plugins
+  initChownData:
+    enabled: false
+  persistence:
+    enabled: true
+    storageClassName: nfs-csi
