@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 110,
+  "id": 137,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -356,6 +356,6 @@
   "timezone": "",
   "title": "Overview",
   "uid": "knative-overview",
-  "version": 6,
+  "version": 3,
   "weekStart": ""
 }

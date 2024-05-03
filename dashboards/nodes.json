@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 112,
+  "id": 136,
   "links": [],
   "panels": [
     {
@@ -1120,7 +1120,7 @@
         "current": {
           "selected": false,
           "text": "knative-prometheus",
-          "value": "ddkhreau1dwqof"
+          "value": "ddklg6csg8s1se"
         },
         "hide": 0,
         "includeAll": false,
@@ -1224,6 +1224,6 @@
   "timezone": "utc",
   "title": "Nodes",
   "uid": "nodes",
-  "version": 5,
+  "version": 1,
   "weekStart": ""
 }

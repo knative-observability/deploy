@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 111,
+  "id": 138,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -74,7 +74,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ddkhreau1dwqof"
+        "uid": "knative-prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -275,7 +275,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ddkhreau1dwqof"
+        "uid": "knative-prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -539,7 +539,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "bdkhrh10ipmgwa"
+        "uid": "knative-loki"
       },
       "gridPos": {
         "h": 7,
@@ -562,7 +562,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "bdkhrh10ipmgwa"
+            "uid": "knative-loki"
           },
           "editorMode": "builder",
           "expr": "{namespace=\"$servicenamespace\", service_name=~\"$servicename-[0-9]{5}\", pod=\"$revision\"} | json time=\"time\", log=\"log\" | line_format `{{.log}}` | drop level, app, container, job | regexp `(?i)\\b(?P<level2>emerg|fatal|alert|crit(ical)?|eror|error|warn(ing)?|info(rmation(al)?)?|notice|dbug|debug|trace)\\b` | label_format level=level2",
@@ -576,7 +576,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "bdkhrh10ipmgwa"
+        "uid": "knative-loki"
       },
       "gridPos": {
         "h": 7,
@@ -599,7 +599,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "bdkhrh10ipmgwa"
+            "uid": "knative-loki"
           },
           "editorMode": "builder",
           "expr": "{namespace=\"$servicenamespace\", service_name=~\"$servicename-[0-9]{5}\", pod=\"$revision\"} | json time=\"time\", log=\"log\" | line_format `{{.log}}` | drop level, app, container, job | regexp `(?i)\\b(?P<level2>emerg|fatal|alert|crit(ical)?|eror|error|warn(ing)?|info(rmation(al)?)?|notice|dbug|debug|trace)\\b` | label_format level=level2 | level =~ `(?i)(emerg|fatal|alert|crit(ical)?|eror|error|warn(ing)?)`",
@@ -626,7 +626,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ddkhreau1dwqof"
+        "uid": "knative-prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -718,7 +718,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ddkhreau1dwqof"
+            "uid": "knative-prometheus"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
@@ -755,7 +755,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ddkhreau1dwqof"
+        "uid": "knative-prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -804,7 +804,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ddkhreau1dwqof"
+            "uid": "knative-prometheus"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
@@ -1046,7 +1046,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "ddkhreau1dwqof"
+          "uid": "knative-prometheus"
         },
         "definition": "label_values(revision_app_request_count{namespace_name=\"$servicenamespace\"},configuration_name)",
         "hide": 0,
@@ -1104,6 +1104,6 @@
   "timezone": "",
   "title": "Service",
   "uid": "service",
-  "version": 14,
+  "version": 5,
   "weekStart": ""
 }

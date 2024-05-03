@@ -98,16 +98,18 @@ kubectl apply -f agent.yaml
 
 ```bash
 cd ../lyz-knative-datasource
-mage -v			# Build Backend
 npm install		# Install Frontend Dependency
+mage -v			# Build Backend
 npm run build	# Build Frontend
 
-export PLUGIN_PATH=/storage/pvc-9cc93f38-2d2c-431b-8e1e-fe510b05ba2e/plugins
+export PLUGIN_PATH=/storage/pvc-48ed67e0-8845-47c7-9d69-a15f99cb9e6e/plugins
 
+sudo rm -rf ${PLUGIN_PATH}/lyz-knative-datasource
 sudo mkdir -p ${PLUGIN_PATH}/lyz-knative-datasource
 sudo cp -R dist ${PLUGIN_PATH}/lyz-knative-datasource
 sudo mv ${PLUGIN_PATH}/lyz-knative-datasource/dist ${PLUGIN_PATH}/lyz-knative-datasource/lyz-knative-datasource
 chmod -R 777 ${PLUGIN_PATH}/lyz-knative-datasource
+chown -R 472:472 ${PLUGIN_PATH}
 kubectl delete pod -n observability -l app.kubernetes.io/name=grafana
 ```
 
@@ -117,7 +119,7 @@ kubectl delete pod -n observability -l app.kubernetes.io/name=grafana
 k port-forward -n observability svc/prometheus-grafana 3000:80
 ## port forward to host (ssh -L or VSCode)
 ## + Prometheus: knative-prometheus
-##   http://prometheus-kube-prometheus-prometheus.observability:9090
+##   http://prometheus-kube-prometheus-prometheus:9090
 ## + Loki: knative-loki
 ##   http://loki:3100
 ## + Jaeger: knative-jaeger
