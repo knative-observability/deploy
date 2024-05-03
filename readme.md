@@ -6,6 +6,7 @@
   * 该集群使用 Magic DNS 作为解析服务。
   * 该集群使用 In-Memory Channel 作为消息层通道服务。
   * 该集群使用 MT-Channel-based 作为 Broker 层。
+  * 该集群安装了 NFS CSI 动态制备卷接口实现，并且接入了 NFS 服务器。
 * MetalLB，作为集群的 LoadBalancer 实现。
 * cert-manager，作为 Jaeger 的依赖。
 * Knative CLI 和 Knative Func CLI，作为函数部署的工具。
@@ -21,6 +22,7 @@
 ```bash
 git clone https://github.com/knative-observability/lyz-knative-datasource.git
 git clone https://github.com/knative-observability/knative-agent.git
+git clone https://github.com/knative-observability/deploy.git
 ...（待补充）
 ```
 
@@ -37,10 +39,11 @@ kubectl create namespace observability
 # Metric observability
 # kube-prometheus-stack
 # ├── Prometheus
-# └── Grafana (Plugin HostPath: /data/plugins)
+# └── Grafana
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 helm install prometheus prometheus-community/kube-prometheus-stack -n observability -f values/kube-prometheus-stack.yaml
+!!! chown to 472:472 and chmod to 777
 # Create Prometheus ServiceMonitor CRs
 kubectl apply -f servicemonitors.yaml
 
@@ -53,19 +56,26 @@ kubectl apply -f config-tracing.yaml
 
 # Log observability
 ## Loki
-## ------------------ Run them in EVERY node -----------------┐
-### Set HostPath permissions
-sudo useradd -u 10001 loki
-sudo mkdir -p /data/loki
-sudo chown -R loki:loki /data/loki
-## -----------------------------------------------------------┘
-kubectl apply -f loki-pv.yaml # Create a persistent volume
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 helm install --values values/loki.yaml loki --namespace=observability grafana/loki
+!!! chown to 10001:10001
 ## Promtail
 helm upgrade --values values/promtail.yaml --install promtail --namespace=observability grafana/promtail
 ```
+
+#### 验证原生组件部署
+
+```bash
+# deploy bomb
+kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n observability 9090:9090 &
+kubectl port-forward svc/jaeger-query -n observability 16686:16686 &
+## Port forward to host
+## ...
+k port-forward -n observability svc/prometheus-grafana 3000:80
+```
+
+
 
 #### 部署 Knative Agent
 
@@ -92,10 +102,30 @@ mage -v			# Build Backend
 npm install		# Install Frontend Dependency
 npm run build	# Build Frontend
 
-sudo mkdir -p /data/plugins/lyz-knative-datasource
-sudo cp -R dist /data/plugins/lyz-knative-datasource
-sudo mv /data/plugins/lyz-knative-datasource/dist /data/plugins/lyz-knative-datasource/lyz-knative-datasource
-chmod -R 777 /data/plugins/lyz-knative-datasource
+export PLUGIN_PATH=/storage/pvc-9cc93f38-2d2c-431b-8e1e-fe510b05ba2e/plugins
+
+sudo mkdir -p ${PLUGIN_PATH}/lyz-knative-datasource
+sudo cp -R dist ${PLUGIN_PATH}/lyz-knative-datasource
+sudo mv ${PLUGIN_PATH}/lyz-knative-datasource/dist ${PLUGIN_PATH}/lyz-knative-datasource/lyz-knative-datasource
+chmod -R 777 ${PLUGIN_PATH}/lyz-knative-datasource
 kubectl delete pod -n observability -l app.kubernetes.io/name=grafana
+```
+
+#### 配置 Grafana 面板
+
+```bash
+k port-forward -n observability svc/prometheus-grafana 3000:80
+## port forward to host (ssh -L or VSCode)
+## + Prometheus: knative-prometheus
+##   http://prometheus-kube-prometheus-prometheus.observability:9090
+## + Loki: knative-loki
+##   http://loki:3100
+## + Jaeger: knative-jaeger
+##   http://jaeger-query:16686
+## + Knative Agent: knative-agent
+##   http://knative-agent:9091
+
+## new Dashboard folder: knative
+
 ```
 
