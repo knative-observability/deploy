@@ -23,6 +23,18 @@
   "liveNow": false,
   "panels": [
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 9,
+      "panels": [],
+      "type": "row"
+    },
+    {
       "datasource": {
         "type": "alertmanager",
         "uid": "alertmanager"
@@ -31,7 +43,7 @@
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 1
       },
       "id": 6,
       "options": {
@@ -52,14 +64,18 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 2
+        "y": 3
       },
       "id": 5,
       "panels": [],
+      "title": "Service",
       "type": "row"
     },
     {
-      "datasource": "knative-prometheus",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddkhreau1dwqof"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -147,10 +163,10 @@
         ]
       },
       "gridPos": {
-        "h": 11,
+        "h": 7,
         "w": 15,
         "x": 0,
-        "y": 3
+        "y": 4
       },
       "id": 1,
       "options": {
@@ -173,7 +189,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum by(response_code) (rate(revision_app_request_count{service_name=\"${servicename}\", namespace_name=\"${servicenamespace}\"}[$__rate_interval]))",
+          "expr": "sum by(response_code) (rate(revision_app_request_count{service_name=\"${servicename}\", namespace_name=\"${servicenamespace}\", pod_name=\"$revision\"}[$__rate_interval]))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "instant": false,
@@ -206,10 +222,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
+        "h": 7,
         "w": 9,
         "x": 15,
-        "y": 3
+        "y": 4
       },
       "id": 2,
       "options": {
@@ -257,7 +273,10 @@
       "type": "piechart"
     },
     {
-      "datasource": "knative-prometheus",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddkhreau1dwqof"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -314,10 +333,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
+        "h": 6,
         "w": 12,
         "x": 0,
-        "y": 14
+        "y": 11
       },
       "id": 3,
       "options": {
@@ -340,7 +359,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "histogram_quantile(0.99, sum by(le) (rate(revision_app_request_latencies_bucket{service_name=\"${servicename}\", namespace_name=\"${servicenamespace}\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, sum by(le) (rate(revision_app_request_latencies_bucket{service_name=\"${servicename}\", namespace_name=\"${servicenamespace}\", pod_name=\"$revision\"}[$__rate_interval])))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "instant": false,
@@ -458,10 +477,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
+        "h": 6,
         "w": 12,
         "x": 12,
-        "y": 14
+        "y": 11
       },
       "id": 4,
       "maxDataPoints": 10,
@@ -523,10 +542,10 @@
         "uid": "bdkhrh10ipmgwa"
       },
       "gridPos": {
-        "h": 10,
+        "h": 7,
         "w": 12,
         "x": 0,
-        "y": 24
+        "y": 17
       },
       "id": 7,
       "options": {
@@ -546,7 +565,7 @@
             "uid": "bdkhrh10ipmgwa"
           },
           "editorMode": "builder",
-          "expr": "{namespace=\"$servicenamespace\", service_name=~\"$servicename-[0-9]{5}\"} | json time=\"time\", log=\"log\" | line_format `{{.log}}` | drop level, app, container, job | regexp `(?i)\\b(?P<level2>emerg|fatal|alert|crit(ical)?|eror|error|warn(ing)?|info(rmation(al)?)?|notice|dbug|debug|trace)\\b` | label_format level=level2",
+          "expr": "{namespace=\"$servicenamespace\", service_name=~\"$servicename-[0-9]{5}\", pod=\"$revision\"} | json time=\"time\", log=\"log\" | line_format `{{.log}}` | drop level, app, container, job | regexp `(?i)\\b(?P<level2>emerg|fatal|alert|crit(ical)?|eror|error|warn(ing)?|info(rmation(al)?)?|notice|dbug|debug|trace)\\b` | label_format level=level2",
           "queryType": "range",
           "refId": "A"
         }
@@ -560,10 +579,10 @@
         "uid": "bdkhrh10ipmgwa"
       },
       "gridPos": {
-        "h": 10,
+        "h": 7,
         "w": 12,
         "x": 12,
-        "y": 24
+        "y": 17
       },
       "id": 8,
       "options": {
@@ -583,13 +602,407 @@
             "uid": "bdkhrh10ipmgwa"
           },
           "editorMode": "builder",
-          "expr": "{namespace=\"$servicenamespace\", service_name=~\"$servicename-[0-9]{5}\"} | json time=\"time\", log=\"log\" | line_format `{{.log}}` | drop level, app, container, job | regexp `(?i)\\b(?P<level2>emerg|fatal|alert|crit(ical)?|eror|error|warn(ing)?|info(rmation(al)?)?|notice|dbug|debug|trace)\\b` | label_format level=level2 | level =~ `(?i)(emerg|fatal|alert|crit(ical)?|eror|error|warn(ing)?)`",
+          "expr": "{namespace=\"$servicenamespace\", service_name=~\"$servicename-[0-9]{5}\", pod=\"$revision\"} | json time=\"time\", log=\"log\" | line_format `{{.log}}` | drop level, app, container, job | regexp `(?i)\\b(?P<level2>emerg|fatal|alert|crit(ical)?|eror|error|warn(ing)?|info(rmation(al)?)?|notice|dbug|debug|trace)\\b` | label_format level=level2 | level =~ `(?i)(emerg|fatal|alert|crit(ical)?|eror|error|warn(ing)?)`",
           "queryType": "range",
           "refId": "A"
         }
       ],
       "title": "Warning/Error/Fatal Logs",
       "type": "logs"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "id": 10,
+      "panels": [],
+      "title": "Container",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddkhreau1dwqof"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "yellow",
+                "value": null
+              }
+            ]
+          },
+          "unit": "CPU ms/s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{cpu=\"total\", endpoint=\"https-metrics\", id=\"/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podf67b624a_3b8f_4403_a705_aa98035282c3.slice\", instance=\"192.168.103.221:10250\", job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"bomb\", node=\"lyz-2\", pod=\"bad-00005-deployment-5f64467847-x4gnv\", service=\"prometheus-kube-prometheus-kubelet\"} * 1000"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 9,
+        "x": 0,
+        "y": 25
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddkhreau1dwqof"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "rate(container_cpu_usage_seconds_total{namespace=\"$servicenamespace\", pod=\"$revision\"}[$__rate_interval])",
+          "fullMetaSearch": false,
+          "includeNullMetadata": false,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "CPU Usage Rate",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "binary": {
+              "left": "{cpu=\"total\", endpoint=\"https-metrics\", id=\"/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podf67b624a_3b8f_4403_a705_aa98035282c3.slice\", instance=\"192.168.103.221:10250\", job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"bomb\", node=\"lyz-2\", pod=\"bad-00005-deployment-5f64467847-x4gnv\", service=\"prometheus-kube-prometheus-kubelet\"}",
+              "operator": "*",
+              "right": "1000"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddkhreau1dwqof"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "CPU second"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 9,
+        "y": 25
+      },
+      "id": 13,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddkhreau1dwqof"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "container_cpu_usage_seconds_total{namespace=\"$servicenamespace\", pod=\"$revision\"}",
+          "fullMetaSearch": false,
+          "includeNullMetadata": false,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "CPU Usage",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{__name__=\"container_memory_usage_bytes\", endpoint=\"https-metrics\", id=\"/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podf67b624a_3b8f_4403_a705_aa98035282c3.slice\", instance=\"192.168.103.221:10250\", job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"bomb\", node=\"lyz-2\", pod=\"bad-00005-deployment-5f64467847-x4gnv\", service=\"prometheus-kube-prometheus-kubelet\"}"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 9,
+        "x": 12,
+        "y": 25
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "container_memory_usage_bytes{namespace=\"$servicenamespace\", pod=\"$revision\"}",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Memory Usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 21,
+        "y": 25
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "container_memory_usage_bytes{namespace=\"$servicenamespace\", pod=\"$revision\"}",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Memory Usage",
+      "type": "stat"
     }
   ],
   "refresh": "",
@@ -627,9 +1040,9 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": "receiver",
-          "value": "receiver"
+          "selected": false,
+          "text": "bad",
+          "value": "bad"
         },
         "datasource": {
           "type": "prometheus",
@@ -652,6 +1065,34 @@
         "skipUrlSync": false,
         "sort": 7,
         "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "bad-00005-deployment-5f64467847-x4gnv",
+          "value": "bad-00005-deployment-5f64467847-x4gnv"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "definition": "label_values(revision_app_request_count{namespace_name=\"$servicenamespace\", configuration_name=\"$servicename\"},pod_name)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Revision",
+        "multi": false,
+        "name": "revision",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(revision_app_request_count{namespace_name=\"$servicenamespace\", configuration_name=\"$servicename\"},pod_name)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 8,
+        "type": "query"
       }
     ]
   },
@@ -663,6 +1104,6 @@
   "timezone": "",
   "title": "Service",
   "uid": "service",
-  "version": 8,
+  "version": 14,
   "weekStart": ""
 }
