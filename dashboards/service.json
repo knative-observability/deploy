@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 138,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -55,7 +55,7 @@
         "content": "# Function Overview",
         "mode": "markdown"
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.3.3",
       "type": "text"
     },
     {
@@ -127,7 +127,8 @@
               }
             ]
           },
-          "unit": "reqps"
+          "unit": "reqps",
+          "unitScale": true
         },
         "overrides": [
           {
@@ -217,7 +218,8 @@
             }
           },
           "mappings": [],
-          "unit": "reqps"
+          "unit": "reqps",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -328,7 +330,8 @@
               }
             ]
           },
-          "unit": "ms"
+          "unit": "ms",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -472,7 +475,8 @@
               }
             ]
           },
-          "unit": "req"
+          "unit": "req",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -675,7 +679,8 @@
               }
             ]
           },
-          "unit": "CPU ms/s"
+          "unit": "CPU ms/s",
+          "unitScale": true
         },
         "overrides": [
           {
@@ -772,7 +777,8 @@
               }
             ]
           },
-          "unit": "CPU second"
+          "unit": "CPU second",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -799,7 +805,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.3.3",
       "targets": [
         {
           "datasource": {
@@ -824,7 +830,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "prometheus"
+        "uid": "knative-prometheus"
       },
       "description": "",
       "fieldConfig": {
@@ -874,7 +880,8 @@
               }
             ]
           },
-          "unit": "decbytes"
+          "unit": "decbytes",
+          "unitScale": true
         },
         "overrides": [
           {
@@ -917,7 +924,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "prometheus"
+            "uid": "knative-prometheus"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
@@ -937,7 +944,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "prometheus"
+        "uid": "knative-prometheus"
       },
       "description": "",
       "fieldConfig": {
@@ -955,7 +962,8 @@
               }
             ]
           },
-          "unit": "decbytes"
+          "unit": "decbytes",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -982,12 +990,12 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.3.3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "prometheus"
+            "uid": "knative-prometheus"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
@@ -1018,7 +1026,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "prometheus"
+          "uid": "knative-prometheus"
         },
         "definition": "label_values(revision_app_request_count,namespace_name)",
         "hide": 0,
@@ -1069,12 +1077,12 @@
       {
         "current": {
           "selected": false,
-          "text": "bad-00005-deployment-5f64467847-x4gnv",
-          "value": "bad-00005-deployment-5f64467847-x4gnv"
+          "text": "bad-00001-deployment-86759f47cc-f48n6",
+          "value": "bad-00001-deployment-86759f47cc-f48n6"
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "prometheus"
+          "uid": "knative-prometheus"
         },
         "definition": "label_values(revision_app_request_count{namespace_name=\"$servicenamespace\", configuration_name=\"$servicename\"},pod_name)",
         "hide": 0,
@@ -1104,6 +1112,6 @@
   "timezone": "",
   "title": "Service",
   "uid": "service",
-  "version": 5,
+  "version": 1,
   "weekStart": ""
 }

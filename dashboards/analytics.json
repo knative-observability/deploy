@@ -1,0 +1,287 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 4,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "lyz-knative-datasource",
+        "uid": "d991cb7b-901c-4b1b-9b4a-3461a9bbd039"
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 16,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "nodes": {
+          "mainStatUnit": "reqps",
+          "secondaryStatUnit": "ms"
+        }
+      },
+      "pluginVersion": "10.3.3",
+      "targets": [
+        {
+          "constant": 6.5,
+          "datasource": {
+            "type": "lyz-knative-datasource",
+            "uid": "d991cb7b-901c-4b1b-9b4a-3461a9bbd039"
+          },
+          "name": "receiver",
+          "namespace": "bomb",
+          "refId": "A",
+          "type": "Analytics Map"
+        }
+      ],
+      "title": "Analytics Graph",
+      "type": "nodeGraph"
+    },
+    {
+      "datasource": {
+        "type": "lyz-knative-datasource",
+        "uid": "d991cb7b-901c-4b1b-9b4a-3461a9bbd039"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "links": [
+            {
+              "title": "",
+              "url": "explore?schemaVersion=1&panes={\"F50\":{\"datasource\":\"knative-jaeger\",\"queries\":[{\"query\":\"${__data.fields.Trace}\",\"refId\":\"A\",\"datasource\":{\"type\":\"jaeger\",\"uid\":\"b05d84d1-8ca0-4f2d-aeb5-edd699e71533\"}}],\"range\":{\"from\":\"${__from}\",\"to\":\"${__to}\"}}}\n"
+            }
+          ],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 24,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.3.3",
+      "targets": [
+        {
+          "constant": 6.5,
+          "datasource": {
+            "type": "lyz-knative-datasource",
+            "uid": "d991cb7b-901c-4b1b-9b4a-3461a9bbd039"
+          },
+          "name": "receiver",
+          "namespace": "bomb",
+          "refId": "A",
+          "type": "Analytics Traces"
+        }
+      ],
+      "title": "Traces",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "lyz-knative-datasource",
+        "uid": "d991cb7b-901c-4b1b-9b4a-3461a9bbd039"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Name"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Service Details",
+                    "url": "d/service/service?var-servicenamespace=${__data.fields.Namespace}&var-servicename=${__data.fields.Name}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Logs"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Log Details",
+                    "url": "explore?schemaVersion=1&panes={\"FlU\":{\"datasource\":\"knative-loki\",\"queries\":[{\"refId\":\"A\",\"expr\":\"{namespace=\\\"${__data.fields.Namespace}\\\", service_name=~\\\"${__data.fields.Name}-[0-9]{5}\\\"} | json time=\\\"time\\\", log=\\\"log\\\" | line_format `{{.log}}` | drop level, app, container, job | regexp `(?i)\\\\b(?P<level2>emerg|fatal|alert|crit(ical)?|eror|error|warn(ing)?|info(rmation(al)?)?|notice|dbug|debug|trace)\\\\b` | label_format level=level2 | level =~ `(?i)(emerg|fatal|alert|crit(ical)?|eror|error|warn(ing)?)`\\n\",\"queryType\":\"range\",\"datasource\":{\"type\":\"loki\",\"uid\":\"c517b157-d60e-44cd-82e4-344714296b7c\"},\"editorMode\":\"code\"}],\"range\":{\"from\":\"${__from}\",\"to\":\"${__to}\"}}}&orgId=1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 16,
+        "x": 0,
+        "y": 16
+      },
+      "id": 3,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.3.3",
+      "targets": [
+        {
+          "constant": 6.5,
+          "datasource": {
+            "type": "lyz-knative-datasource",
+            "uid": "d991cb7b-901c-4b1b-9b4a-3461a9bbd039"
+          },
+          "name": "receiver",
+          "namespace": "bomb",
+          "refId": "A",
+          "type": "Analytics Services"
+        }
+      ],
+      "title": "Analytics Services",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Logs",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "Name",
+                "Namespace"
+              ],
+              "reducer": "allValues"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "field": "Name"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Analytics",
+  "uid": "d481c6d8-e505-4a1b-8605-33a77bbae757",
+  "version": 10,
+  "weekStart": ""
+}

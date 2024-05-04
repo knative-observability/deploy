@@ -18,8 +18,9 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 136,
+  "id": 2,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
@@ -105,7 +106,8 @@
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "percentunit",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -202,7 +204,8 @@
               }
             ]
           },
-          "unit": "short"
+          "unit": "short",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -354,7 +357,8 @@
               }
             ]
           },
-          "unit": "bytes"
+          "unit": "bytes",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -453,7 +457,8 @@
               }
             ]
           },
-          "unit": "percent"
+          "unit": "percent",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -479,7 +484,7 @@
         "showThresholdMarkers": true,
         "sizing": "auto"
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.3.3",
       "targets": [
         {
           "datasource": {
@@ -576,7 +581,8 @@
               }
             ]
           },
-          "unit": "Bps"
+          "unit": "Bps",
+          "unitScale": true
         },
         "overrides": [
           {
@@ -680,7 +686,8 @@
               }
             ]
           },
-          "unit": "decbytes"
+          "unit": "decbytes",
+          "unitScale": true
         },
         "overrides": [
           {
@@ -779,7 +786,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.3.3",
       "targets": [
         {
           "datasource": {
@@ -975,7 +982,8 @@
               }
             ]
           },
-          "unit": "bps"
+          "unit": "bps",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -1071,7 +1079,8 @@
               }
             ]
           },
-          "unit": "bps"
+          "unit": "bps",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -1120,7 +1129,7 @@
         "current": {
           "selected": false,
           "text": "knative-prometheus",
-          "value": "ddklg6csg8s1se"
+          "value": "cf4bc0c9-7e25-48b9-be3d-40a3d98b6e0d"
         },
         "hide": 0,
         "includeAll": false,
